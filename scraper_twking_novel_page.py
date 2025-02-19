@@ -3,7 +3,6 @@ from pprint import pprint
 import requests
 from bs4 import BeautifulSoup
 
-
 # Step 1. 讀取主頁排行榜名單
 book_tops = pd.read_csv('booktop.csv')
 # print(book_tops.head(10))

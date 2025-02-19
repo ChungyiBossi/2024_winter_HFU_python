@@ -2,6 +2,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select  # 下拉式選單使用
+from ocr_component import get_captcha_code
 
 driver = webdriver.Chrome()
 driver.get("https://irs.thsrc.com.tw/IMINT/")
@@ -29,14 +30,14 @@ driver.find_element(
 # captcha
 captcha_img = driver.find_element(By.ID, 'BookingS1Form_homeCaptcha_passCode')
 captcha_img.screenshot('captcha.png')
-
+captcha_code = get_captcha_code()
 captcha_input = driver.find_element(By.ID, 'securityCode')
-captcha_input.send_keys('5566')
+captcha_input.send_keys(captcha_code)
 
-time.sleep(5)
+time.sleep(50)
 # submit
 driver.find_element(By.ID, 'SubmitButton').click()
 
 
-time.sleep(20)
+# time.sleep(20)
 driver.quit()
