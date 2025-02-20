@@ -86,18 +86,56 @@ for train in trains:
         }
     )
 
-pprint.pprint(trains_info)
+# pprint.pprint(trains_info)
 # Choose train
 for idx, train in enumerate(trains_info):
     print(
-        f"({idx}) - {train['train_code']}, 行駛時間={train['duration']} | {train['depart_time']} -> {train['arrival_time']}")
+        f"({idx}) - {train['train_code']}, \
+        行駛時間={train['duration']} | \
+        {train['depart_time']} -> \
+        {train['arrival_time']}"
+    )
 
-which_train = int(input("Choose your train. Enter from 0~9:\n"))
+which_train = int(input("Choose your train. Enter from 0~9: "))
 trains_info[which_train]['radio_box'].click()
 
 
 # Submit booking requests
 driver.find_element(By.NAME, 'SubmitButton').click()
+print("選擇車次完成, 進到第三步驟")
+
+
+#
+# 第三個頁面
+#
+
+# Check booking infomation for user
+# print("確認訂票: ")
+# print(
+#     f"車次: {trains_info[which_train]['train_code']} | \
+#     行駛時間: {trains_info[which_train]['duration']} | \
+#     {trains_info[which_train]['depart_time']} -> \
+#     {trains_info[which_train]['arrival_time']}"
+# )
+# print('您的車票共 ', driver.find_element(By.ID, 'TotalPrice').text, " 元")
+# driver.find_element(
+#     By.CLASS_NAME, 'ticket-summary').screenshot('thsr_summary.png')
+
+# Enter personal detail
+input_personal_id = driver.find_element(By.ID, 'idNumber')
+personal_id = input("請輸入身分證字號:\n")
+input_personal_id.send_keys(personal_id)
+
+input_phone_number = driver.find_element(By.ID, 'mobilePhone')
+phone_number = input("請輸入手機號碼:\n")
+input_phone_number.send_keys(phone_number)
+
+input_email = driver.find_element(By.ID, 'email')
+email = input("請輸入Email:\n")
+input_email.send_keys(email)
+
+driver.find_element(By.NAME, 'agree').click()  # 接受使用者個資條款
+driver.find_element(By.ID, 'isSubmit').click()  # 送出表單
 
 
 time.sleep(2000)
