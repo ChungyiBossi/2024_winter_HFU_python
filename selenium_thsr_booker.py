@@ -1,4 +1,5 @@
 import pprint
+import os
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -14,7 +15,6 @@ driver.get("https://irs.thsrc.com.tw/IMINT/")
 #
 # 第一個頁面
 #
-
 # Booking parameters
 start_station = '台中'
 dest_station = '板橋'
@@ -64,11 +64,9 @@ while True:
     except NoSuchElementException:
         print("驗證碼錯誤，重新驗證")
 
-
 #
 # 第二個頁面
 #
-
 trains_info = list()
 trains = driver.find_element(
     By.CLASS_NAME, 'result-listing').find_elements(By.TAG_NAME, 'label')
@@ -114,21 +112,29 @@ driver.find_element(
 
 # Enter personal detail
 input_personal_id = driver.find_element(By.ID, 'idNumber')
-personal_id = input("請輸入身分證字號:\n")
+# personal_id = input("請輸入身分證字號:\n")
+personal_id = os.getenv('PERSONAL_ID')  # 從環境變數拿
 input_personal_id.send_keys(personal_id)
 
 input_phone_number = driver.find_element(By.ID, 'mobilePhone')
-phone_number = input("請輸入手機號碼:\n")
+# phone_number = input("請輸入手機號碼:\n")
+phone_number = os.getenv('PERSONAL_PHONE_NUMBER')
 input_phone_number.send_keys(phone_number)
 
 input_email = driver.find_element(By.ID, 'email')
-email = input("請輸入Email:\n")
+# email = input("請輸入Email:\n")
+email = os.getenv('PERSONAL_EMAIL')
 input_email.send_keys(email)
 
 # Final Check
 driver.find_element(By.NAME, 'agree').click()  # 接受使用者個資條款
 driver.find_element(By.ID, 'isSubmit').click()  # 送出表單
 
+
+# Save booking result
+driver.find_element(
+    By.CLASS_NAME, 'ticket-summary').screenshot('thsr_booking_result.png')
+print("訂票完成!")
 
 time.sleep(2000)
 driver.quit()
