@@ -15,25 +15,30 @@ driver.get("https://irs.thsrc.com.tw/IMINT/")
 # 第一個頁面
 #
 
+# Booking parameters
+start_station = '台中'
+dest_station = '板橋'
+start_time = '18:00'
+start_date = '二月 22, 2025'
+
 # Click accept cookie button
 accept_cookie_button = driver.find_element(By.ID, "cookieAccpetBtn")
 accept_cookie_button.click()
 
 # Choose Booking parameters: startStation, destStation, time
 start_station_element = driver.find_element(By.NAME, 'selectStartStation')
-Select(start_station_element).select_by_visible_text('台中')
+Select(start_station_element).select_by_visible_text(start_station)
 
 dest_station_element = driver.find_element(By.NAME, 'selectDestinationStation')
-Select(dest_station_element).select_by_visible_text('板橋')
+Select(dest_station_element).select_by_visible_text(dest_station)
 
 start_time_element = driver.find_element(By.NAME, 'toTimeTable')
-Select(start_time_element).select_by_visible_text('18:30')
+Select(start_time_element).select_by_visible_text(start_time)
 
 # Choose Booking parameters: date
 driver.find_element(
     By.XPATH, "//input[@class='uk-input' and @readonly='readonly']").click()
 
-start_date = '二月 21, 2025'
 driver.find_element(
     By.XPATH, f"//span[@class='flatpickr-day' and @aria-label='{start_date}']").click()
 
@@ -68,12 +73,6 @@ trains_info = list()
 trains = driver.find_element(
     By.CLASS_NAME, 'result-listing').find_elements(By.TAG_NAME, 'label')
 for train in trains:
-    # depart_time = train.find_element(By.ID, 'QueryDeparture').text
-    # arrival_time = train.find_element(By.ID, 'QueryArrival').text
-    # duration = train.find_element(
-    #     By.CLASS_NAME, 'duration').find_elements(By.TAG_NAME, 'span')[1].text
-    # train_code = train.find_element(By.ID, 'QueryCode').text
-    # radio_box = train.find_element(By.CLASS_NAME, 'uk-radio')
     info = train.find_element(By.CLASS_NAME, 'uk-radio')
     trains_info.append(
         {
@@ -87,7 +86,7 @@ for train in trains:
     )
 
 # pprint.pprint(trains_info)
-# Choose train
+# Show train info & Choose train
 for idx, train in enumerate(trains_info):
     print(
         f"({idx}) - {train['train_code']}, \
@@ -110,16 +109,8 @@ print("選擇車次完成, 進到第三步驟")
 #
 
 # Check booking infomation for user
-# print("確認訂票: ")
-# print(
-#     f"車次: {trains_info[which_train]['train_code']} | \
-#     行駛時間: {trains_info[which_train]['duration']} | \
-#     {trains_info[which_train]['depart_time']} -> \
-#     {trains_info[which_train]['arrival_time']}"
-# )
-# print('您的車票共 ', driver.find_element(By.ID, 'TotalPrice').text, " 元")
-# driver.find_element(
-#     By.CLASS_NAME, 'ticket-summary').screenshot('thsr_summary.png')
+driver.find_element(
+    By.CLASS_NAME, 'ticket-summary').screenshot('thsr_summary.png')
 
 # Enter personal detail
 input_personal_id = driver.find_element(By.ID, 'idNumber')
@@ -134,6 +125,7 @@ input_email = driver.find_element(By.ID, 'email')
 email = input("請輸入Email:\n")
 input_email.send_keys(email)
 
+# Final Check
 driver.find_element(By.NAME, 'agree').click()  # 接受使用者個資條款
 driver.find_element(By.ID, 'isSubmit').click()  # 送出表單
 
