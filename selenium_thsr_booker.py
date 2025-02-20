@@ -75,9 +75,9 @@ for train in trains:
     # train_code = train.find_element(By.ID, 'QueryCode').text
     # radio_box = train.find_element(By.CLASS_NAME, 'uk-radio')
     info = train.find_element(By.CLASS_NAME, 'uk-radio')
-
     trains_info.append(
         {
+            # info.get('屬性名稱')
             'depart_time': info.get_attribute('querydeparture'),
             'arrival_time': info.get_attribute('queryarrival'),
             'duration': info.get_attribute('queryestimatedtime'),
@@ -87,6 +87,18 @@ for train in trains:
     )
 
 pprint.pprint(trains_info)
+# Choose train
+for idx, train in enumerate(trains_info):
+    print(
+        f"({idx}) - {train['train_code']}, 行駛時間={train['duration']} | {train['depart_time']} -> {train['arrival_time']}")
+
+which_train = int(input("Choose your train. Enter from 0~9:\n"))
+trains_info[which_train]['radio_box'].click()
+
+
+# Submit booking requests
+driver.find_element(By.NAME, 'SubmitButton').click()
+
 
 time.sleep(2000)
 driver.quit()
