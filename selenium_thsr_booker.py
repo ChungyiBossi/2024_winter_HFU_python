@@ -10,6 +10,10 @@ options.add_argument("--disable-blink-features=AutomationControlled")
 driver = webdriver.Chrome(options=options)
 driver.get("https://irs.thsrc.com.tw/IMINT/")
 
+#
+# 第一個頁面
+#
+
 # Click accept cookie button
 accept_cookie_button = driver.find_element(By.ID, "cookieAccpetBtn")
 accept_cookie_button.click()
@@ -39,21 +43,24 @@ while True:
     captcha_img.screenshot('captcha.png')
     captcha_code = get_captcha_code()
     captcha_input = driver.find_element(By.ID, 'securityCode')
-    captcha_input.send_keys(1234)
+    captcha_input.send_keys(captcha_code)
     time.sleep(2)
 
     # submit
     driver.find_element(By.ID, 'SubmitButton').click()
-    time.sleep(5)
+    time.sleep(2)
 
     # check validation is success or not
     try:
-        # driver.find_element(By.CLASS_NAME, 'uk-alert-danger uk-alert')
         driver.find_element(By.ID, 'divErrMSG')
     except NoSuchElementException:
         print("進到第二步驟")
         break
 
+
+#
+# 第二個頁面
+#
 
 time.sleep(2000)
 driver.quit()
