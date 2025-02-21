@@ -96,22 +96,20 @@ for idx, train in enumerate(trains_info):
 which_train = int(input("Choose your train. Enter from 0~9: "))
 trains_info[which_train]['radio_box'].click()
 
-
 # Submit booking requests
 driver.find_element(By.NAME, 'SubmitButton').click()
 print("選擇車次完成, 進到第三步驟")
 
-
 #
 # 第三個頁面
 #
-
 # Check booking infomation for user
 driver.find_element(
     By.CLASS_NAME, 'ticket-summary').screenshot('thsr_summary.png')
 
 # Enter personal detail
 input_personal_id = driver.find_element(By.ID, 'idNumber')
+
 # personal_id = input("請輸入身分證字號:\n")
 personal_id = os.getenv('PERSONAL_ID')  # 從環境變數拿
 input_personal_id.send_keys(personal_id)
@@ -129,7 +127,6 @@ input_email.send_keys(email)
 # Final Check
 driver.find_element(By.NAME, 'agree').click()  # 接受使用者個資條款
 driver.find_element(By.ID, 'isSubmit').click()  # 送出表單
-
 
 # Save booking result
 driver.find_element(

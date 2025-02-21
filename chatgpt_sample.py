@@ -3,9 +3,12 @@ from openai import OpenAI
 client = OpenAI()
 
 
-def chat_with_chatgpt(user_message, system_prompt):
+def chat_with_chatgpt(
+        user_message,
+        system_prompt,
+        completition__model="gpt-4o-mini"):
     completion = client.chat.completions.create(
-        model="gpt-4o-mini",  # model name
+        model=completition__model,  # model name
         messages=[
             {
                 "role": "system",
