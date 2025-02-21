@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from markupsafe import escape
 from chatgpt_sample import chat_with_chatgpt
 
@@ -27,6 +27,11 @@ def hello_home(user_message):
         system_prompt="你是一位後端管理員，有前端使用者會呼叫你。"
     )
     return chatgpt_response
+
+
+@app.route("/sample/")
+def show_html_sample():
+    return render_template('sample.html')
 
 
 # 如果要使用 python xxx.py 執行
