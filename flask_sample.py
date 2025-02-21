@@ -31,7 +31,13 @@ def hello_home(user_message):
 
 @app.route("/sample/")
 def show_html_sample():
-    return render_template('sample.html')
+    return render_template(
+        'sample.html',
+        name="Tony",
+        numbers=[11, 22, 33, 44, 55],
+        pairs=[('A', 1), ('B', 2), ('C', 3)],
+        dict_data={'A': 1, 'B': 2, 'C': 3}
+    )
 
 
 # 如果要使用 python xxx.py 執行
