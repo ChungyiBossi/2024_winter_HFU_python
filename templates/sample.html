@@ -10,6 +10,7 @@
     </style>
 </head>
 <body>
+    <!-- Jinja2 模板引擎 -->
     <h3>Get name</h3>
     {% if name %}
         <p> 我的名字是: {{ name }} </p>
@@ -35,7 +36,7 @@
     {% endfor %}
 
     <h2>輸入你的資訊</h2>
-    <input type="text" id="name" placeholder="請輸入你的名字" value="{{ name }}">
+    <input type="text" id="name" placeholder="請輸入你的名字" value="{{ name }}"> 
     <br>
     <button onclick="submitForm()">提交</button>
     <button onclick="clearForm()">清除</button>
