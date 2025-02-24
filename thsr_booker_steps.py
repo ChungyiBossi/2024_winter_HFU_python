@@ -138,7 +138,7 @@ def select_train_and_submit_booking(trains_info):
         By.CLASS_NAME, 'ticket-summary').screenshot(screenshot_filename)
     print("訂票完成!")
 
-    return
+    return screenshot_filename
 
 
 if __name__ == "__main__":
