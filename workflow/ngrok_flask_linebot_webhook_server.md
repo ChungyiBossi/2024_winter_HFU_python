@@ -1,6 +1,6 @@
 # 啟用 Ngrok + webhook server 的流程
 
-1. NGrok: 總機 (API Gateway 反向代理)
+1. Ngrok: 總機 (API Gateway 反向代理)
     * 申請帳號：可以使用Gmail or Github帳號申請
     * 下載Ngrok到任意方便處
     * 於Ngrok.exe處，CMD下加入憑證指令：
