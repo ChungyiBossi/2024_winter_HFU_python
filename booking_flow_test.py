@@ -38,7 +38,8 @@ def ask_missing_infomation(booking_info):  # Slot filling
         system_prompt = f"""
         我想要從回話取得訂票資訊，包含：{', '.join(missing_slots)}。
         並與 {booking_info} 合併，今天是 {today} 。
-        請把資料整理成python dictionary格式，例如：{standard_format}，不知道就填空字串，且回傳不包含其他內容。。
+        請把資料整理成python dictionary格式，例如：{standard_format}，
+        不知道就填空字串，且回傳不包含其他內容。
         """
         return chat_with_chatgpt(user_response, system_prompt)
 
