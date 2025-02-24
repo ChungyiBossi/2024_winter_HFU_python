@@ -20,6 +20,9 @@ from linebot.v3.webhooks import (
 
 import os
 
+# my tools
+from chatgpt_sample import chat_with_chatgpt
+
 app = Flask(__name__)
 
 # 從環境變數裏頭取得access token與channel secret
@@ -57,11 +60,15 @@ def handle_message(event):
                 reply_token=event.reply_token,
                 messages=[
                     #  這邊是你要回覆給使用者的內容
-                    TextMessage(text=event.message.text)
+                    TextMessage(text=chat_with_chatgpt(
+                        user_message=event.message.text,
+                        system_prompt="回應二十字以內"
+                    )
+                    )
                 ]
             )
         )
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
