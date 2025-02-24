@@ -22,7 +22,8 @@ def ask_booking_infomation():
     今天是 {today}，請把資料整理成python dictionary格式，例如：{standard_format}，
     不知道就填空字串，且回傳不包含其他內容。
     """
-    return chat_with_chatgpt(user_response, system_prompt)
+    booking_info = chat_with_chatgpt(user_response, system_prompt)
+    return json.loads(booking_info.replace("'", "\""))
 
 
 def ask_missing_infomation(booking_info):  # Slot filling
@@ -41,7 +42,22 @@ def ask_missing_infomation(booking_info):  # Slot filling
         請把資料整理成python dictionary格式，例如：{standard_format}，
         不知道就填空字串，且回傳不包含其他內容。
         """
-        return chat_with_chatgpt(user_response, system_prompt)
+
+        booking_info = chat_with_chatgpt(user_response, system_prompt)
+        return json.loads(booking_info.replace("'", "\""))
+
+
+def convert_date_to_thsr_format(booking_info):
+    map_number_to_chinese_word = {
+        "01": "一月", "02": "二月", "03": "三月", "04": "四月",
+        "05": "五月", "06": "六月", "07": "七月", "08": "八月",
+        "09": "九月", "10": "十月", "11": "十一月", "12": "十二月"
+    }
+    Year, Month, Day = booking_info['出發日期'].split('/')
+    booking_info['出發日期'] = f"{map_number_to_chinese_word[Month]} {Day}, {Year}"
+    print("格式轉換後......")
+    print(booking_info)
+    return booking_info
 
 
 if __name__ == '__main__':
@@ -49,5 +65,7 @@ if __name__ == '__main__':
     booking_info = ask_booking_infomation()
 
     # Step 2
-    booking_info = ask_missing_infomation(
-        json.loads(booking_info.replace("'", "\"")))
+    booking_info = ask_missing_infomation(booking_info)
+
+    # Step 3：調整日期格式以便爬蟲使用, ex: '2025/02/25' -> '二月 25, 2025'
+    booking_info = convert_date_to_thsr_format(booking_info)
