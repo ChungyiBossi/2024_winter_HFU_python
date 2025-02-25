@@ -73,7 +73,11 @@ def update_user_data(user_id, **info_dict):
     if user_id not in user_data:
         user_data[user_id] = info_dict
     else:
-        user_data[user_id].update(info_dict)
+        info_has_value = {
+            slot_name: slot_value
+            for slot_name, slot_value in info_dict.items() if slot_value
+        }
+        user_data[user_id].update(info_has_value)
 
 
 def get_user_data(user_id):
@@ -144,7 +148,12 @@ def handle_message(event):
             # 依照訊息送出訂位，直到選車為止
             user_data = convert_date_to_thsr_format(user_data)
             create_driver()  # 目前只支持單人，driver是global的
-            trains_info = booking_with_info(user_data)
+            trains_info = booking_with_info(
+                start_station=user_data['出發站'],
+                dest_station=user_data['到達站'],
+                start_time=user_data['出發時辰'],
+                start_date=user_data['出發日期']
+            )
 
             # Show train info & Choose train
             train_message = ""

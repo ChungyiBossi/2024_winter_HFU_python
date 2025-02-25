@@ -151,6 +151,7 @@ def select_train_and_submit_booking(trains_info, which_train=None):
         By.CLASS_NAME, 'ticket-summary').screenshot(screenshot_filename)
     print("訂票完成!")
 
+    driver.quit()
     return screenshot_filename
 
 
@@ -180,6 +181,3 @@ if __name__ == "__main__":
 
     # Step 5
     select_train_and_submit_booking(trains_info)
-
-    time.sleep(10)
-    driver.quit()
