@@ -115,7 +115,8 @@ def handle_message(event):
     elif user_data.get("intent") == "訂高鐵":  # 意圖判斷
         # 上一輪的資訊狀態
         unfilled_slots = [
-            key for key in necessary_slots if key not in user_data]  # 未填的資訊
+            # 未填的資訊
+            key for key in necessary_slots if not user_data.get(key)]
 
         # user message information extraction
         system_prompt = f"""
@@ -130,9 +131,11 @@ def handle_message(event):
         # 判斷已填的資訊
         user_data = get_user_data(user_id)  # 重新讀取一次user_data
         filled_slots = [
-            key for key in necessary_slots if key in user_data]  # 已填的資訊
+            # 已填的資訊
+            key for key in necessary_slots if user_data.get(key)]
         unfilled_slots = [
-            key for key in necessary_slots if key not in user_data]  # 未填的資訊
+            # 未填的資訊
+            key for key in necessary_slots if not user_data.get(key)]
 
         app.logger.info(f"filled_slots: {filled_slots}")
         app.logger.info(f"unfilled_slots: {unfilled_slots}")
