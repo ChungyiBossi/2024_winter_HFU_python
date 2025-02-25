@@ -22,7 +22,16 @@ import os
 
 # my tools
 from chatgpt_sample import chat_with_chatgpt
-from booking_info_extraction_flow import extract_dict_from_string
+from booking_info_extraction_flow import (
+    extract_dict_from_string,
+    convert_date_to_thsr_format
+)
+
+from thsr_booker_steps import (
+    create_driver,
+    booking_with_info,
+    select_train_and_submit_booking
+)
 
 app = Flask(__name__)
 
@@ -116,7 +125,7 @@ def handle_message(event):
         """
         booking_info = chat_with_chatgpt(user_message, system_prompt)
         booking_info = extract_dict_from_string(booking_info)
-        update_user_data(user_id, **booking_info)
+        update_user_data(user_id, **booking_info)  # 把剛取得的資訊更新到 user_data
 
         # 判斷已填的資訊
         user_data = get_user_data(user_id)  # 重新讀取一次user_data
@@ -130,24 +139,53 @@ def handle_message(event):
 
         if len(unfilled_slots) == 0:  # 全部填完
             # 依照訊息送出訂位，直到選車為止
-            pass
+            user_data = convert_date_to_thsr_format(user_data)
+            create_driver()  # 目前只支持單人，driver是global的
+            trains_info = booking_with_info(user_data)
+
+            # Show train info & Choose train
+            train_message = ""
+            for idx, train in enumerate(trains_info):
+                train_message += \
+                    f"({idx}) - {train['train_code']}, \
+                    行駛時間={train['duration']} | \
+                    {train['depart_time']} -> \
+                    {train['arrival_time']} \n"
+
+            bot_response = f"已為您找到以下列車，請選擇0~9：\n{train_message}"
+            # 更改intent為"選高鐵"，並更新車次查詢結果
+            update_user_data(user_id, intent="選高鐵", trains_info=trains_info)
+
         else:  # 部分填完
             # 問缺少的資訊
-            pass
+            bot_response = f"請補充你的高鐵訂位資訊，包含：{', '.join(unfilled_slots)}: "
+
+    elif user_data.get("intent") == "選高鐵":
+        try:
+            # 依照使用者選擇的車次，進行訂位
+            which_train = int(user_message)
+            trains_info = user_data.get("trains_info")
+            select_train_and_submit_booking(trains_info, which_train)
+            bot_response = "訂票完成！"
+        except Exception as e:
+            # 如果無法從使用者回覆取得數字
+            app.logger.error(e)
+            bot_response = "請輸入0~9的數字"
+
+    else:
+        bot_response = chat_with_chatgpt(
+            user_message=user_message,
+            system_prompt="回應二十字以內"
+        )
+
+    response_messages = [TextMessage(text=bot_response)]
 
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
-                messages=[
-                    #  這邊是你要回覆給使用者的內容
-                    TextMessage(text=chat_with_chatgpt(
-                        user_message=user_message,
-                        system_prompt="回應二十字以內"
-                    )
-                    )
-                ]
+                messages=response_messages
             )
         )
 

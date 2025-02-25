@@ -105,9 +105,12 @@ def booking_with_info(start_station, dest_station, start_time, start_date):
     return trains_info
 
 
-def select_train_and_submit_booking(trains_info):
+def select_train_and_submit_booking(trains_info, which_train=None):
 
-    which_train = int(input("Choose your train. Enter from 0~9: "))
+    if which_train is None:
+        # 如果沒有選擇車次，則由使用者選擇(一般程式的執行流程，採用CMD輸入)
+        which_train = int(input("Choose your train. Enter from 0~9: "))
+
     trains_info[which_train]['radio_box'].click()
 
     # Submit booking requests
