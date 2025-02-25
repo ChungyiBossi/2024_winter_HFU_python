@@ -40,7 +40,7 @@ driver.find_element(
     By.XPATH, "//input[@class='uk-input' and @readonly='readonly']").click()
 
 driver.find_element(
-    By.XPATH, f"//span[@class='flatpickr-day' and @aria-label='{start_date}']").click()
+    By.XPATH, f"//span[(@class='flatpickr-day' or @class='flatpickr-day today selected') and @aria-label='{start_date}']").click()
 
 while True:
     # captcha
