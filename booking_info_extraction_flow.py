@@ -1,3 +1,4 @@
+import re
 from chatgpt_sample import chat_with_chatgpt
 from datetime import date
 import json
@@ -12,6 +13,21 @@ standard_format = {
 today = date.today().strftime("%Y/%m/%d")  # 取得今天日期
 
 
+def extract_dict_from_string(input_string):
+    # 定義正則表達式來匹配字典內容
+    pattern = r"\{\s*'[^']*':\s*'[^']*'(?:,\s*'[^']*':\s*'[^']*')*\s*\}"
+    match = re.search(pattern, input_string)
+
+    if match:
+        dict_string = match.group(0)
+        # 將單引號替換為雙引號以便於 json.loads 解析
+        dict_string = dict_string.replace("'", "\"")
+        print("After regular expression ....: ", dict_string)
+        return json.loads(dict_string)
+    else:
+        raise ValueError("Information Extraction Failed.")
+
+
 def ask_booking_information():
     print("Ask booking information")
 
@@ -23,7 +39,7 @@ def ask_booking_information():
     不知道就填空字串，且回傳不包含其他內容。
     """
     booking_info = chat_with_chatgpt(user_response, system_prompt)
-    return json.loads(booking_info.replace("'", "\""))
+    return extract_dict_from_string(booking_info)
 
 
 def ask_missing_information(booking_info):  # Slot filling
@@ -44,7 +60,7 @@ def ask_missing_information(booking_info):  # Slot filling
         """
 
         booking_info = chat_with_chatgpt(user_response, system_prompt)
-        return json.loads(booking_info.replace("'", "\""))
+        return extract_dict_from_string(booking_info)
 
 
 def convert_date_to_thsr_format(booking_info):
