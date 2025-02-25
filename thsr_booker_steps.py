@@ -168,7 +168,7 @@ if __name__ == "__main__":
     # Step 4
     trains_info = booking_with_info(
         start_station=booking_info['出發站'],
-        dest_station=booking_info['抵達站'],
+        dest_station=booking_info['到達站'],
         start_time=booking_info['出發時辰'],
         start_date=booking_info['出發日期'])
 
