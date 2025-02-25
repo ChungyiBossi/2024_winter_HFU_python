@@ -9,8 +9,8 @@ from selenium.common.exceptions import NoSuchElementException  # Handle exceptio
 # Project modules
 from ocr_component import get_captcha_code
 from booking_info_extraction_flow import (
-    ask_booking_infomation,
-    ask_missing_infomation,
+    ask_booking_information,
+    ask_missing_information,
     convert_date_to_thsr_format
 )
 
@@ -157,9 +157,9 @@ if __name__ == "__main__":
     # start_date = '二月 25, 2025'
 
     # Step 1
-    booking_info = ask_booking_infomation()
+    booking_info = ask_booking_information()
     # Step 2
-    booking_info = ask_missing_infomation(booking_info)
+    booking_info = ask_missing_information(booking_info)
     # Step 3：調整日期格式以便爬蟲使用, ex: '2025/02/25' -> '二月 25, 2025'
     booking_info = convert_date_to_thsr_format(booking_info)
 

@@ -12,7 +12,7 @@ standard_format = {
 today = date.today().strftime("%Y/%m/%d")  # 取得今天日期
 
 
-def ask_booking_infomation():
+def ask_booking_information():
     print("Ask booking information")
 
     user_response = input(
@@ -26,7 +26,7 @@ def ask_booking_infomation():
     return json.loads(booking_info.replace("'", "\""))
 
 
-def ask_missing_infomation(booking_info):  # Slot filling
+def ask_missing_information(booking_info):  # Slot filling
     print("Ask missing information")
     missing_slots = [key for key, value in booking_info.items() if not value]
     if not missing_slots:
@@ -62,10 +62,10 @@ def convert_date_to_thsr_format(booking_info):
 
 if __name__ == '__main__':
     # Step 1
-    booking_info = ask_booking_infomation()
+    booking_info = ask_booking_information()
 
     # Step 2
-    booking_info = ask_missing_infomation(booking_info)
+    booking_info = ask_missing_information(booking_info)
 
     # Step 3：調整日期格式以便爬蟲使用, ex: '2025/02/25' -> '二月 25, 2025'
     booking_info = convert_date_to_thsr_format(booking_info)
