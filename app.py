@@ -17,11 +17,12 @@ from linebot.v3.webhooks import (
     MessageEvent,
     TextMessageContent
 )
-
+from datetime import date
 import os
 
 # my tools
 from chatgpt_sample import chat_with_chatgpt
+from booking_info_extraction_flow import extract_dict_from_string
 
 app = Flask(__name__)
 
@@ -29,6 +30,45 @@ app = Flask(__name__)
 configuration = Configuration(
     access_token=os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
+
+# User Data
+# {
+#     'user_id_a': {
+#         'intent': '訂高鐵',
+#         '出發站': '台北',
+#         '到達站': '台南',
+#         '出發日期': '2022/10/10',
+#         '出發時辰': '10:00'
+#     },
+#     'user_id_b': {
+#         'intent': '訂高鐵',
+#         '到達站': '高雄',
+#         '出發日期': '2022/11/11',
+#     },
+#     'user_id_c': {}
+# }
+
+user_data = {}
+
+standard_format = {
+    "出發站": "出發站名",
+    "到達站": "到達站名",
+    "出發日期": "YYYY/MM/DD",
+    "出發時辰": "H:S"
+}
+
+today = date.today().strftime("%Y/%m/%d")  # 取得今天日期
+
+
+def update_user_data(user_id, **info_dict):
+    if user_id not in user_data:
+        user_data[user_id] = info_dict
+    else:
+        user_data[user_id].update(info_dict)
+
+
+def get_user_data(user_id):
+    return user_data.get(user_id, {})
 
 
 @app.route("/callback", methods=['POST'])
@@ -53,6 +93,48 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
+    user_id = event.source.user_id
+    user_message = event.message.text
+    user_data = get_user_data(user_id)
+    necessary_slots = ["出發站", "到達站", "出發日期", "出發時辰"]
+
+    if user_data.get("intent", "") != "訂高鐵" and user_message == "訂高鐵":
+        update_user_data(user_id, intent="訂高鐵")  # 更新意圖為:訂高鐵
+        # 問第一個問題: "請輸入你的高鐵訂位資訊..."
+        bot_response = "請輸入你的高鐵訂位資訊，包含：出發站、到達站、出發日期、出發時辰: "
+
+    elif user_data.get("intent") == "訂高鐵":  # 意圖判斷
+        # 上一輪的資訊狀態
+        unfilled_slots = [
+            key for key in necessary_slots if key not in user_data]  # 未填的資訊
+
+        # user message information extraction
+        system_prompt = f"""
+        我想要從回話取得訂票資訊，包含：{"、".join(unfilled_slots)}。
+        今天是 {today}，請把資料整理成python dictionary格式，例如：{standard_format}，
+        不知道就填空字串，且回傳不包含其他內容。
+        """
+        booking_info = chat_with_chatgpt(user_message, system_prompt)
+        booking_info = extract_dict_from_string(booking_info)
+        update_user_data(user_id, **booking_info)
+
+        # 判斷已填的資訊
+        user_data = get_user_data(user_id)  # 重新讀取一次user_data
+        filled_slots = [
+            key for key in necessary_slots if key in user_data]  # 已填的資訊
+        unfilled_slots = [
+            key for key in necessary_slots if key not in user_data]  # 未填的資訊
+
+        app.logger.info(f"filled_slots: {filled_slots}")
+        app.logger.info(f"unfilled_slots: {unfilled_slots}")
+
+        if len(unfilled_slots) == 0:  # 全部填完
+            # 依照訊息送出訂位，直到選車為止
+            pass
+        else:  # 部分填完
+            # 問缺少的資訊
+            pass
+
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
@@ -61,7 +143,7 @@ def handle_message(event):
                 messages=[
                     #  這邊是你要回覆給使用者的內容
                     TextMessage(text=chat_with_chatgpt(
-                        user_message=event.message.text,
+                        user_message=user_message,
                         system_prompt="回應二十字以內"
                     )
                     )
