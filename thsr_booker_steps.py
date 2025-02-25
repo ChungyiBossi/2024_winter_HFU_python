@@ -5,7 +5,14 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select  # 下拉式選單使用
 from selenium.common.exceptions import NoSuchElementException  # Handle exception
+
+# Project modules
 from ocr_component import get_captcha_code
+from booking_info_extraction_flow import (
+    ask_booking_infomation,
+    ask_missing_infomation,
+    convert_date_to_thsr_format
+)
 
 
 def create_driver():
@@ -144,18 +151,28 @@ def select_train_and_submit_booking(trains_info):
 if __name__ == "__main__":
 
     # Booking parameters
-    start_station = '台中'
-    dest_station = '板橋'
-    start_time = '18:00'
-    start_date = '二月 25, 2025'
+    # start_station = '台中'
+    # dest_station = '板橋'
+    # start_time = '18:00'
+    # start_date = '二月 25, 2025'
+
+    # Step 1
+    booking_info = ask_booking_infomation()
+    # Step 2
+    booking_info = ask_missing_infomation(booking_info)
+    # Step 3：調整日期格式以便爬蟲使用, ex: '2025/02/25' -> '二月 25, 2025'
+    booking_info = convert_date_to_thsr_format(booking_info)
 
     create_driver()
 
-    # Step 1, 2
+    # Step 4
     trains_info = booking_with_info(
-        start_station, dest_station, start_time, start_date)
+        start_station=booking_info['出發站'],
+        dest_station=booking_info['抵達站'],
+        start_time=booking_info['出發時辰'],
+        start_date=booking_info['出發日期'])
 
-    # Step 3, 4
+    # Step 5
     select_train_and_submit_booking(trains_info)
 
     time.sleep(10)
