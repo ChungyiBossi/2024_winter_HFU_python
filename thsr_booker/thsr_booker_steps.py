@@ -7,8 +7,8 @@ from selenium.webdriver.support.select import Select  # 下拉式選單使用
 from selenium.common.exceptions import NoSuchElementException  # Handle exception
 
 # Project modules
-from ocr_component import get_captcha_code
-from booking_info_extraction_flow import (
+from thsr_booker.ocr_component import get_captcha_code
+from thsr_booker.booking_info_extraction_flow import (
     ask_booking_information,
     ask_missing_information,
     convert_date_to_thsr_format

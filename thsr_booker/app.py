@@ -21,13 +21,13 @@ from datetime import date
 import os
 
 # my tools
-from chatgpt_sample import chat_with_chatgpt
-from booking_info_extraction_flow import (
+from thsr_booker.chatgpt_sample import chat_with_chatgpt
+from thsr_booker.booking_info_extraction_flow import (
     extract_dict_from_string,
     convert_date_to_thsr_format
 )
 
-from thsr_booker_steps import (
+from thsr_booker.thsr_booker_steps import (
     create_driver,
     booking_with_info,
     select_train_and_submit_booking

@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select  # 下拉式選單使用
 from selenium.common.exceptions import NoSuchElementException  # Handle exception
-from ocr_component import get_captcha_code
+from thsr_booker.ocr_component import get_captcha_code
 
 options = webdriver.ChromeOptions()  # 創立 driver物件所需的參數物件
 options.add_argument("--disable-blink-features=AutomationControlled")

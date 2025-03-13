@@ -1,5 +1,5 @@
 import re
-from chatgpt_sample import chat_with_chatgpt
+from thsr_booker.chatgpt_sample import chat_with_chatgpt
 from datetime import date
 import json
 
