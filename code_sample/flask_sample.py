@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from markupsafe import escape
-from chatgpt_sample import chat_with_chatgpt
+from thsr_booker.chatgpt_sample import chat_with_chatgpt
 
 app = Flask(__name__)
 
