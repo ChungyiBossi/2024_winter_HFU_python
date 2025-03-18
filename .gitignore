@@ -1,6 +1,7 @@
 __pycache__
 *.exe
 *.pt
+*.savedmodel
 *.jpg
 runs/
 2024_winter_project.code-workspace
