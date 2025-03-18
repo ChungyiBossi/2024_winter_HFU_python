@@ -1,0 +1,111 @@
+[
+    {
+        "address_components": [
+            {
+                "long_name": "1600",
+                "short_name": "1600",
+                "types": [
+                    "street_number"
+                ]
+            },
+            {
+                "long_name": "Amphitheatre Parkway",
+                "short_name": "Amphitheatre Pkwy",
+                "types": [
+                    "route"
+                ]
+            },
+            {
+                "long_name": "Mountain View",
+                "short_name": "Mountain View",
+                "types": [
+                    "locality",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "Santa Clara County",
+                "short_name": "Santa Clara County",
+                "types": [
+                    "administrative_area_level_2",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "California",
+                "short_name": "CA",
+                "types": [
+                    "administrative_area_level_1",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "United States",
+                "short_name": "US",
+                "types": [
+                    "country",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "94043",
+                "short_name": "94043",
+                "types": [
+                    "postal_code"
+                ]
+            }
+        ],
+        "formatted_address": "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA",
+        "geometry": {
+            "location": {
+                "lat": 37.4220107,
+                "lng": -122.0847485
+            },
+            "location_type": "ROOFTOP",
+            "viewport": {
+                "northeast": {
+                    "lat": 37.4233539302915,
+                    "lng": -122.0827778697085
+                },
+                "southwest": {
+                    "lat": 37.42065596970851,
+                    "lng": -122.0854758302915
+                }
+            }
+        },
+        "navigation_points": [
+            {
+                "location": {
+                    "latitude": 37.4209875,
+                    "longitude": -122.0829572
+                }
+            },
+            {
+                "location": {
+                    "latitude": 37.4211303,
+                    "longitude": -122.0852965
+                }
+            },
+            {
+                "location": {
+                    "latitude": 37.4229106,
+                    "longitude": -122.0834137
+                }
+            },
+            {
+                "location": {
+                    "latitude": 37.4230191,
+                    "longitude": -122.0850138
+                }
+            }
+        ],
+        "place_id": "ChIJF4Yf2Ry7j4AR__1AkytDyAE",
+        "plus_code": {
+            "compound_code": "CWC8+R4 Mountain View, CA",
+            "global_code": "849VCWC8+R4"
+        },
+        "types": [
+            "street_address"
+        ]
+    }
+]
