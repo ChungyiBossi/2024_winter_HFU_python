@@ -11,25 +11,14 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
-matplotlib.use('Agg')
 
 
 def load_model(model_path):
     return tf.saved_model.load(model_path)
 
 
-def preprocess_image(img_path):
-    # img = cv2.imread(img_path)
-    # # RGB for TM input
-    # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    # # Resize the raw image into (224-height,224-width) pixels
-    # image = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
-    # # Make the image a numpy array and reshape it to the models input shape.
-    # image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
-    # # Normalize the image array
-    # image = (image / 127.5) - 1
-    # return image
-    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+def load_image(img_path):
+    RGB_data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
     # Replace this with the path to your image
     image = Image.open(img_path).convert("RGB")
@@ -45,8 +34,8 @@ def preprocess_image(img_path):
     normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
 
     # Load the image into the array
-    data[0] = normalized_image_array
-    return data
+    RGB_data[0] = normalized_image_array
+    return RGB_data
 
 
 def evaluate_model(model, test_folder):
@@ -61,7 +50,7 @@ def evaluate_model(model, test_folder):
 
         for img_name in os.listdir(class_folder):
             img_path = os.path.join(class_folder, img_name)
-            img_array = preprocess_image(img_path)
+            img_array = load_image(img_path)
             predictions = model(img_array)
             predicted_class = np.argmax(predictions)
 
@@ -87,8 +76,8 @@ def evaluate_model(model, test_folder):
 if __name__ == '__main__':
 
     # 設定模型與測試資料夾
-    MODEL_PATH = "models/pue_tm_enhance_flip_model/epoch_50"  # 修改為你的模型路徑
-    TEST_IMAGES_FOLDER = 'datasets/pue_dataset/test'  # 測試圖片資料夾
+    MODEL_PATH = "models\pue_tm_enhance_flip_model\with_dot_50"  # 修改為你的模型路徑
+    TEST_IMAGES_FOLDER = 'datasets\pue_with_dot_dataset/enhance/test'  # 測試圖片資料夾
     IMAGE_SIZE = 224  # 根據 Teachable Machine 訓練時的輸入尺寸設置
 
     # 執行測試

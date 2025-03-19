@@ -82,14 +82,8 @@ def generate_flip_img(input_folder, output_folder):
 
 
 if __name__ == '__main__':
-    # # Train
-    # INPUT_FOLDER = 'datasets/pue_dataset/train'  # 原始圖片資料夾
-    # OUTPUT_FOLDER = 'datasets/pue_dataset/enhance/train'  # 增強後的圖片儲存資料夾
-    # enhance_images_in_folder(INPUT_FOLDER, OUTPUT_FOLDER)
-
-    # # Test
-    INPUT_FOLDER = 'datasets/pue_dataset/test'  # 原始圖片資料夾
-    OUTPUT_FOLDER = 'datasets/pue_dataset/enhance/test'  # 增強後的圖片儲存資料夾
-    enhance_images_in_folder(INPUT_FOLDER, OUTPUT_FOLDER)
-
-    generate_flip_img(OUTPUT_FOLDER, OUTPUT_FOLDER)  # enhance -> gen aug
+    # 原始圖片資料夾，需要把train/test的各類別資料都做預處理
+    INPUT_FOLDER = 'datasets/pue_with_dot_dataset/train'
+    OUTPUT_FOLDER = 'datasets/pue_with_dot_dataset/enhance/train'  # 預處理後的輸出資料夾
+    enhance_images_in_folder(INPUT_FOLDER, OUTPUT_FOLDER)  # 光度與對比預處理
+    generate_flip_img(OUTPUT_FOLDER, OUTPUT_FOLDER)  # 增加翻轉圖片
