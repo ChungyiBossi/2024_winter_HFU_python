@@ -12,9 +12,9 @@ driver = webdriver.Chrome(options=options)
 driver.get("https://www.akc.org/dog-breeds/shiba-inu/")
 
 
-accept_cookie = driver.find_element(By.ID, "onetrust-accept-btn-handler")
-accept_cookie.click()
-driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+# accept_cookie = driver.find_element(By.ID, "onetrust-accept-btn-handler")
+# accept_cookie.click()
+# driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 # 　Use JavaScript
 # elements_texts = driver.execute_script(
@@ -28,8 +28,14 @@ data = element.get_attribute("data-js-props")
 
 data = json.loads(data)
 
-with open("breed_data.json", 'w') as output:
-    json.dump(data, output, indent=4)
+dog_breed = "shiba-inu"
+health_desc = data['settings']['breed_data']['health'][dog_breed]['akc_org_health']
+nutrition_desc = data['settings']['breed_data']['health'][dog_breed]['akc_org_nutrition']
+
+print(health_desc.replace("&nbsp;", "").strip())
+print(nutrition_desc.replace("&nbsp;", "").strip())
+# with open("breed_data.json", 'w') as output:
+#     json.dump(data, output, indent=4)
 
 
 time.sleep(2000)
