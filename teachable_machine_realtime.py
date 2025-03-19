@@ -12,6 +12,8 @@ def classify_image(classifier, cv2_image):
     # Convert BGR to RGB (opencv default color channel == BGR )
     # We need RGB for TM model input
     RGB_img = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB)
+    # RGB_img = cv2_image
+
     # Resize the raw image into (224-height,224-width) pixels
     image = cv2.resize(RGB_img, (224, 224), interpolation=cv2.INTER_LANCZOS4)
 
